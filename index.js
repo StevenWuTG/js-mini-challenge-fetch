@@ -3,7 +3,7 @@
 const name = document.querySelector(".player h2")
 const nickName = document.querySelector("em")
 const likes = document.querySelector(".likes")
-const heart = document.querySelector("like-button")
+const heart = document.querySelector(".like-button")
 const photo = document.querySelector("img")
 const goalsUl = document.querySelector("ul")
 const form = document.querySelector("form#new-goal-form")
@@ -21,7 +21,7 @@ getData()
 
 // player load
 function loadData (player) {
-    debugger
+    // debugger
     nickName.textContent = player.nickname
     name.textContent = player.name
     likes.textContent = player.likes
@@ -41,3 +41,21 @@ function loadData (player) {
         goalsUl.append(li)
     })
 }
+
+
+heart.addEventListener("click", function(e){
+    fetch("http://localhost:3000/players/1", {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            likes: `${parseInt(likes.textContent) + 1}`
+        })
+    })
+    .then(resp => resp.json())
+    .then(updatedLikes => {
+        
+        likes.textContent = `${updatedLikes.likes} Likes` 
+    })
+})
